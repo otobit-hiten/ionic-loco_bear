@@ -1,0 +1,72 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>Laser Tag Waiting List</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid class="header">
+    <ion-row>
+      <ion-col size="2">Laser Tag Waiting List</ion-col>
+      <ion-col size="3">
+        <div class="duration">
+          Game Duration :
+          <div class="duration_child">30 Min</div>
+        </div>
+      </ion-col>
+      <ion-col size="3" class="center">
+        <div class="duration">
+          Player Count :
+          <div class="duration_child">25</div>
+        </div>
+      </ion-col>
+      <ion-col size="4">
+        <div class="duration">
+          Approx Waiting Time :
+          <div class="duration_child">1.5 Hours</div>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid class="slot">
+    <ion-row class="slot_border">
+      <ion-col size="3" class="start">Slot 1</ion-col>
+      <ion-col size="3" class="start">20/25/20</ion-col>
+      <ion-col size="3" class="start">30min</ion-col>
+      <ion-col size="3" class="end">
+        <ion-button fill="clear" size="small">Notify</ion-button>
+        <ion-button fill="clear" size="small">+</ion-button>
+        <ion-button fill="clear" size="small">P</ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row class="slot_border">
+      <ion-col size="3" class="start">Player Name</ion-col>
+      <ion-col size="3" class="start">Phone No.</ion-col>
+      <ion-col size="3" class="start">Players</ion-col>
+      <ion-col class="end" size="3">Quick Access</ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="3" class="start">Player 1 Name</ion-col>
+      <ion-col size="3" class="start">9090909090</ion-col>
+      <ion-col size="1.5" class="start">10</ion-col>
+      <ion-col class="end" size="4.5">
+        <ion-button fill="clear" size="small">Notify</ion-button>
+        <ion-button fill="clear" size="small">Arrived</ion-button>
+        <ion-button fill="clear" size="small"><</ion-button>
+            <ion-button fill="clear" size="small">></ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button (click)="openDialog()">
+      Add Slot
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+</ion-content>

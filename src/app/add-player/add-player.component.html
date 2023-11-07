@@ -1,0 +1,29 @@
+<ion-content>
+
+  <div class="add_player_header">
+    <ion-text> Add Player </ion-text>
+  </div>
+  <div class="input_filed">
+    <div class="label">
+      <ion-label>Player Name</ion-label>
+    </div>
+    <ion-input fill="outline" [(ngModel)]="name" placeholder="Player Name"></ion-input>
+    <div class="label">
+      <ion-label class="label">Player Phone No.</ion-label>
+    </div>
+    <ion-input fill="outline" type="Number" [(ngModel)]="number" placeholder="Player Phone No."></ion-input>
+    <div class="label">
+      <ion-label class="label">Player Count</ion-label>
+    </div>
+    <ion-input fill="outline" type="Number" [(ngModel)]="count" placeholder="Player Count"></ion-input>
+ 
+   <ion-row>
+  <ion-col size="6"><ion-button class="button_cancel" (click)="cancel()" fill="clear" expand="full">Cancel</ion-button></ion-col>
+  <ion-col size="6"><ion-button class="button_save" (click)="save()"  fill="clear" expand="full">Save</ion-button></ion-col>
+</ion-row>
+
+ 
+  </div>
+
+  
+</ion-content>

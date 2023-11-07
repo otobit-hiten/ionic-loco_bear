@@ -1,0 +1,50 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>Cricket</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col class="header">
+        Cricket
+      </ion-col>
+      <ion-col class="header">
+        <div class="duration">
+          Approx Waiting Time :
+          <div class="duration_child">1.5 Hours</div>
+          </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid class="slot">
+  <ion-row class="slot_border">
+    <ion-col size="3">Player Name</ion-col>
+    <ion-col size="3" >Phone No.</ion-col>
+    <ion-col size="3">Players</ion-col>
+    <ion-col size="3" class="end">Quick Access</ion-col>
+  </ion-row>
+
+  <ion-row>
+    <ion-col size="3">Player 1 Name</ion-col>
+    <ion-col size="3" >9090909090</ion-col>
+    <ion-col size="1.5">10</ion-col>
+    <ion-col class="end" size="4.5" >
+      <ion-button fill="clear" size="small">Notify</ion-button>
+      <ion-button fill="clear" size="small">Arrived</ion-button>
+      <ion-button fill="clear" size="small"><</ion-button>
+      <ion-button fill="clear" size="small">></ion-button>
+    </ion-col>
+  </ion-row>
+  
+  </ion-grid>
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button (click)="openDialog()">
+       Add Slot  
+      <ion-icon name="add"></ion-icon>
+      </ion-fab-button>
+    </ion-fab> 
+</ion-content>

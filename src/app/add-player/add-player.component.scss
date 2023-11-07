@@ -1,0 +1,42 @@
+.add_player_header {
+    margin-top: 5%;
+    font-size: x-large;
+    text-align: center;
+    font-family: Roboto;
+}
+.input_filed {
+    margin-inline: 10%;
+}
+
+ion-input {
+    margin-top: 1%;
+    font-family: Roboto;
+}
+.label {
+    margin-top: 3%;
+    font-family: Roboto;
+}
+
+.button_cancel {
+    border-radius: 10px;
+    border: 1px solid black;
+    color: black;
+    font-family: Roboto;
+    font-weight: 700;
+    word-wrap: break-word;
+    text-transform: capitalize;
+}
+
+.button_save {
+    border-radius: 10px;
+    background-color: #eaeaea;
+    color: black;
+    font-family: Roboto;
+    font-weight: 700;
+    word-wrap: break-word;
+    text-transform: capitalize;
+}
+
+ion-row{
+    margin-top: 10px;
+}

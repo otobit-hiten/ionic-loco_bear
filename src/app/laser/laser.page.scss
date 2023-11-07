@@ -1,0 +1,85 @@
+.game_header{
+    border: 1px solid #858585;
+    border-right: 0px;
+}
+.game_header_left{
+    border: 1px solid #858585;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-right: 0px solid;
+    
+}
+.game_header_right{
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border: 1px solid #858585;
+
+}
+
+.duration {
+    display: flex;
+}
+
+.duration_child {
+    padding-inline: 5%;
+    width: max-content;
+    margin-inline: 5px;
+    text-align: center;
+    border: 1px solid #858585;
+    border-radius: 5px;
+   
+}
+
+
+
+.slot{
+    margin-inline: 3%;
+    border: 1px solid #858585;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.header{
+    margin-inline: 2.5%;
+    font-weight: 600;
+}
+
+.line{
+    border: 0.5px solid #858585;
+}
+
+ion-button{
+    background-color: #EAEAEA;
+    border-radius: 5px;
+    font-family: Roboto;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+.slot_border{
+    border-bottom: 1px solid #858585;
+    font-weight: 600;
+}
+
+
+
+ion-col.center{
+    text-align: center;
+}
+ion-col.end{
+    text-align: end;
+}
+
+ion-col.start{
+    text-align: start;
+}
+
+ion-content{
+    font-family: Roboto;
+}
+
+ion-title{
+     text-align: center;
+     font-family: Roboto;
+     color: #000;
+     font-weight: 800;
+}
