@@ -27,24 +27,28 @@
     <ion-col size="3" class="end">Quick Access</ion-col>
   </ion-row>
 
-  <ion-row>
-    <ion-col size="3">Player 1 Name</ion-col>
-    <ion-col size="3" >9090909090</ion-col>
-    <ion-col size="1.5">10</ion-col>
-    <ion-col class="end" size="4.5" >
+  <!-- <ion-row *ngFor="let data of playerList; let i = index">
+    <ion-col class="col" size="3">{{data.name}}</ion-col>
+    <ion-col class="col" size="3" >{{data.phone}}</ion-col>
+    <ion-col class="col" size="1.5">{{data.playerCount}}</ion-col>
+    <ion-col  class="col"class="end" size="4.5" >
       <ion-button fill="clear" size="small">Notify</ion-button>
       <ion-button fill="clear" size="small">Arrived</ion-button>
       <ion-button fill="clear" size="small"><</ion-button>
-      <ion-button fill="clear" size="small">></ion-button>
-    </ion-col>
-  </ion-row>
+      <ion-button fill="clear" size="small">></ion-button> -->
+    <!-- </ion-col>
+  </ion-row> -->
+
+  <div class="not_found">
+  <ion-img src="assets/not-found.png" style="width: 5%; height: 5%;"></ion-img>
+</div>
   
   </ion-grid>
 
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
     <ion-fab-button (click)="openDialog()">
        Add Slot  
-      <ion-icon name="add"></ion-icon>
+      <!-- <ion-icon name="add"></ion-icon> -->
       </ion-fab-button>
     </ion-fab> 
 </ion-content>
