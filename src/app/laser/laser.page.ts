@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { AddPlayerComponent } from '../add-player/add-player.component';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-laser',
@@ -12,10 +13,13 @@ import { AddPlayerComponent } from '../add-player/add-player.component';
   imports: [IonicModule, CommonModule, FormsModule]
 })
 export class LaserPage implements OnInit {
+  public gameData : any;
 
-  constructor(private modalController: ModalController) { }
+  constructor(private modalController: ModalController,private activatedRoute : ActivatedRoute) { }
 
   ngOnInit() {
+    var testA=this.activatedRoute.snapshot.queryParams.get('gameData')
+    console.log(testA)
   }
   async openDialog() {
     const modal = await this.modalController.create({

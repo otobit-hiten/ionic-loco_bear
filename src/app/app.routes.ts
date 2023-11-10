@@ -3,11 +3,14 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
   {
     path: '',
+    loadComponent: () => import('./landing-screen/landing-screen.page').then( m => m.LandingScreenPage)
+  },{
+    path: 'home',
     loadComponent: () => import('./home/home.page').then( m => m.HomePage)
   },
   {
     path: 'laser',
-    loadComponent: () => import('./laser/laser.page').then( m => m.LaserPage)
+    loadComponent: () => import('./laser/laser.page').then( m => m.LaserPage),
   },
   {
     path: 'cricket',
@@ -21,4 +24,9 @@ export const routes: Routes = [
     path: 'bowling',
     loadComponent: () => import('./bowling/bowling.page').then( m => m.BowlingPage)
   },
+  {
+    path: 'landing-screen',
+    loadComponent: () => import('./landing-screen/landing-screen.page').then( m => m.LandingScreenPage)
+  },
+
 ];

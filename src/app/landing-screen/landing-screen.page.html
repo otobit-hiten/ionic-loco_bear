@@ -1,0 +1,27 @@
+<ion-content [fullscreen]="true">
+  <div *ngIf="!orgSet" class="back-white">
+    <ion-input
+      label="Device Name  :"
+      class="input"
+      [(ngModel)]="deviceName"
+    ></ion-input>
+    <ion-list class="list" *ngFor="let org of listData">
+      <ion-button
+        class="button_class"
+        shape="round"
+        expand="block"
+        (click)="setOrg(org.Id)"
+        >{{org.Text}}</ion-button
+      >
+    </ion-list>
+  </div>
+  <div class="back-white" *ngIf="orgSet">
+    <div class="top-text">
+      Please wait while the device is being configured
+      <ion-spinner name="lines-sharp"></ion-spinner>
+      <div *ngIf="gameSet">{{gameData.ForGame.Id}}</div>
+      <br />
+      <ion-button (click)="callOrganisation()">Check</ion-button>
+    </div>
+  </div>
+</ion-content>
