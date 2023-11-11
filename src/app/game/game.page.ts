@@ -1,12 +1,14 @@
 import { ActivatedRoute } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { AddPlayerComponent } from '../add-player/add-player.component';
 import { Player } from '../player';
 import { PreferenceService } from '../preference.service';
-
+import { ChangeDetectorRef } from '@angular/core';
+import { ConnectionStatus, Network } from '@capacitor/network';
+import { PluginListenerHandle } from '@capacitor/core';
 @Component({
   selector: 'app-game',
   templateUrl: './game.page.html',
@@ -16,18 +18,39 @@ import { PreferenceService } from '../preference.service';
 })
 export class GamePage implements OnInit {
 
-  public gameName:string='';
+  public gameName: string = '';
+  status: boolean = false
+  network: PluginListenerHandle | undefined;
 
-  constructor(private modalController: ModalController, private shared: PreferenceService, private route:ActivatedRoute) {
-    this.gameName =this.route.snapshot.params.gameName;
-    console.log(this.route.snapshot.params.gameName)
-   }
+
+  constructor(private ngZone: NgZone, private changeDetectorRef: ChangeDetectorRef, private modalController: ModalController, private shared: PreferenceService, private route: ActivatedRoute) {
+    this.gameName = this.route.snapshot.params.gameName;
+  }
+
   public playerKeys: string[] = []
   player: Player[] = []
-  ngOnInit() {
+  async ngOnInit() {
+    this.network = await Network.addListener('networkStatusChange', status => {
+      this.ngZone.run(() => {
+        this.changeStatus(status);
+      });
+    });
+    const status = await Network.getStatus();
+    this.changeStatus(status);
     this.getPlayerKey()
   }
+  changeStatus(status: ConnectionStatus) {
+    this.status = status.connected;
+  }
+
+  ngOnDestroy(): void {
+    if (this.network) {
+      this.network.remove();
+    }
+  }
+
   async getPlayerKey() {
+    this.playerKeys = []
     await this.shared.getPlayerKey('player').then((res) => {
       let key: string[] = JSON.parse(res!)
       this.playerKeys = key
@@ -35,17 +58,17 @@ export class GamePage implements OnInit {
     this.getPlayerList()
   }
 
-  getPlayerList() {
+  async getPlayerList() {
+    this.player = []
     if (this.playerKeys !== null) {
       for (var data of this.playerKeys) {
-        this.shared.getPlayer(data).then((res) => {
-          console.log(res)
+        await this.shared.getPlayer(data).then((res) => {
           let player: Player = JSON.parse(res!)
           this.player.push(player)
         })
       }
     }
-
+    console.log(this.player, "Hiten")
     return this.player
   }
 
@@ -58,7 +81,7 @@ export class GamePage implements OnInit {
         field3: '',
       },
     });
-    modal.onDidDismiss().then((data) => {
+    modal.onDidDismiss().then(async (data) => {
       const player: Player = {
         name: '',
         phone: 0,
@@ -72,9 +95,9 @@ export class GamePage implements OnInit {
       player.playerCount = data.data['field3']
       player.arrived = false
       player.id = "id" + Math.random().toString(16).slice(2)
-      this.shared.savePlayer(player.id, JSON.stringify(player))
+      await this.shared.savePlayer(player.id, JSON.stringify(player))
 
-      this.shared.getPlayerKey('player').then((data) => {
+      await this.shared.getPlayerKey('player').then((data) => {
         if (data === null) {
           key.push(player.id)
         } else {
@@ -87,13 +110,23 @@ export class GamePage implements OnInit {
       })
 
 
-      this.shared.getPlayer(player.id).then((data) => {
+      await this.shared.getPlayer(player.id).then((data) => {
         console.log(data!, "Player")
       })
-      this.shared.key().then((data) => {
+      await this.shared.key().then((data) => {
         console.log(data!, "Key")
       })
+      this.getPlayerKey()
+      this.changeDetectorRef.detectChanges()
     });
     return await modal.present();
+  }
+
+  up(i: number) {
+
+    console.log(this.player.length)
+  }
+  down(i: number) {
+    console.log(this.player.length)
   }
 }

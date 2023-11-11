@@ -1,6 +1,8 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-title>{{gameName}}</ion-title>
+    <ion-text class="ion-text-active" slot="end" *ngIf="status">Connected</ion-text>
+    <ion-text class="ion-text-notActive" slot="end" *ngIf="!status">No Connection</ion-text>
   </ion-toolbar>
 </ion-header>
 
@@ -8,7 +10,7 @@
   <ion-grid>
     <ion-row>
       <ion-col class="header">
-        Bowling
+        {{gameName}}
       </ion-col>
       <ion-col class="header">
         <div class="duration">
@@ -32,10 +34,15 @@
       <ion-col class="col" size="3">{{data.phone}}</ion-col>
       <ion-col class="col" size="1.5">{{data.playerCount}}</ion-col>
       <ion-col class="col" class="end" size="4.5">
+        <ion-button fill="clear" size="small" (click)="up(i)">
+          <ion-icon src="assets/up.svg"></ion-icon>
+        </ion-button>
+        <ion-button fill="clear" size="small" (click)="down(i)">
+          <ion-icon src="assets/down.svg"></ion-icon>
+        </ion-button>
         <ion-button fill="clear" size="small">Notify</ion-button>
         <ion-button fill="clear" size="small">Arrived</ion-button>
-        <ion-button fill="clear" size="small"><</ion-button>
-        <ion-button fill="clear" size="small">></ion-button>
+ 
       </ion-col>
     </ion-row>
 
@@ -47,8 +54,8 @@
 
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
     <ion-fab-button (click)="openDialog()">
-      Add Slot
-      <!-- <ion-icon name="add"></ion-icon> -->
+    
+      <ion-icon src="assets/add.svg"></ion-icon>
     </ion-fab-button>
   </ion-fab>
 </ion-content>

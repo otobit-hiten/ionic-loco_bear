@@ -3,10 +3,10 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
-    path: '',
+    path: 'game/:gameName',
     loadComponent: () => import('./landing-screen/landing-screen.page').then( m => m.LandingScreenPage)
   },{
-    path: 'game/:gameName',
+    path: '',
     loadComponent: () => import('./game/game.page').then( m => m.GamePage)
   },
   {

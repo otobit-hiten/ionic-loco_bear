@@ -1,7 +1,6 @@
 .duration {
     display: flex;
     float: right;
-    
 }
 
 .duration_child {
@@ -10,73 +9,83 @@
     margin-inline-start: 10px;
     width: max-content;
     border: 1px solid #858585;
-    border-radius: 5px;   
-    
+    border-radius: 5px;
 }
 
-
-ion-grid{
+ion-grid {
     margin-inline: 3%;
 }
 
-.line{
+.line {
     border: 1px solid #858585;
 }
 
-ion-button{
-    background-color: #EAEAEA;
+ion-button {
+    background-color: #eaeaea;
     border-radius: 5px;
     font-family: Roboto;
     font-weight: 600;
     text-transform: capitalize;
-    
 }
 
-
-.slot_border{
+.slot_border {
     border-bottom: 1px solid #858585;
     font-weight: 600;
 }
-.slot{
+.slot {
     margin-inline: 3%;
     border: 1px solid #858585;
     border-radius: 10px;
-    
 }
 
-
-ion-col.center{
+ion-col.center {
     text-align: center;
 }
-ion-col.end{
+ion-col.end {
     text-align: end;
-    
 }
 
-ion-col.start{
+ion-col.start {
     text-align: start;
 }
-ion-col.header{
-   font-weight: 600;
+ion-col.header {
+    font-weight: 600;
 }
-ion-content{
+ion-content {
     font-family: Roboto;
 }
 
-ion-title{
+ion-title {
     text-align: center;
     font-family: Roboto;
     color: #000;
     font-weight: 800;
 }
-.col{
+.col {
     display: flex;
     align-items: center;
 }
 
-.not_found{
+.not_found {
     padding: 5%;
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.ion-text-active{
+    display: flex;
+    margin-right: 3%;
+    align-content: center;
+    color: green;
+    font-size: small;
+    font-weight: bold;
+}
+.ion-text-notActive{
+    display: flex;
+    margin-right: 3%;
+    align-content: center;
+    color: red;
+    font-size: small;
+    font-weight: bold;
 }
