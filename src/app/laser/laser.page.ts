@@ -18,8 +18,7 @@ export class LaserPage implements OnInit {
   constructor(private modalController: ModalController,private activatedRoute : ActivatedRoute) { }
 
   ngOnInit() {
-    var testA=this.activatedRoute.snapshot.queryParams.get('gameData')
-    console.log(testA)
+    // this.activatedRoute.snapshot.queryParams.
   }
   async openDialog() {
     const modal = await this.modalController.create({
