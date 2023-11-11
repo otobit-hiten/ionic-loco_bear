@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
-    path: '',
+    path: 'landing',
     loadComponent: () => import('./landing-screen/landing-screen.page').then( m => m.LandingScreenPage)
   },{
     path: 'home',
@@ -21,7 +21,7 @@ export const routes: Routes = [
     loadComponent: () => import('./shooting/shooting.page').then( m => m.ShootingPage)
   },
   {
-    path: 'bowling',
+    path: '',
     loadComponent: () => import('./bowling/bowling.page').then( m => m.BowlingPage)
   },
   {

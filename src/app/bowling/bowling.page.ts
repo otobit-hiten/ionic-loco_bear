@@ -16,30 +16,34 @@ import { PreferenceService } from '../preference.service';
 export class BowlingPage implements OnInit {
 
   constructor(private modalController: ModalController, private shared: PreferenceService) { }
-   public playerKeys: string[] = []
-   player : Player[] = []
+  public playerKeys: string[] = []
+  player: Player[] = []
   ngOnInit() {
-    this.getPlayerList()
+    this.getPlayerKey()
   }
-  getPlayerList(){
-    this.shared.getPlayerKey('player').then((res) => {
-      let key :string[] = JSON.parse(res!)
+  async getPlayerKey() {
+    await this.shared.getPlayerKey('player').then((res) => {
+      let key: string[] = JSON.parse(res!)
       this.playerKeys = key
     })
+    this.getPlayerList()
+  }
 
-   
+  getPlayerList() {
+    if (this.playerKeys !== null) {
+      for (var data of this.playerKeys) {
+        this.shared.getPlayer(data).then((res) => {
+          console.log(res)
+          let player: Player = JSON.parse(res!)
+          this.player.push(player)
+        })
+      }
+    }
+
+    return this.player
   }
 
   async openDialog() {
-    this.playerKeys.forEach((data) => {
-      this.shared.getPlayer(data).then((res) =>{
-        console.log(res)
-        let player :Player[] = JSON.parse(res!)
-        this.player = player
-      })
-    })
-    console.log(this.player)
-    console.log(this.playerKeys)
     const modal = await this.modalController.create({
       component: AddPlayerComponent,
       componentProps: {
@@ -63,11 +67,11 @@ export class BowlingPage implements OnInit {
       player.arrived = false
       player.id = "id" + Math.random().toString(16).slice(2)
       this.shared.savePlayer(player.id, JSON.stringify(player))
-      
+
       this.shared.getPlayerKey('player').then((data) => {
-        if(data === null){
+        if (data === null) {
           key.push(player.id)
-        }else{
+        } else {
           let aa = JSON.parse(data!)
           key = aa
           key.push(player.id)
@@ -75,13 +79,13 @@ export class BowlingPage implements OnInit {
         console.log(key)
         this.shared.savePlayerKey('player', JSON.stringify(key))
       })
-  
-      
+
+
       this.shared.getPlayer(player.id).then((data) => {
         console.log(data!, "Player")
       })
       this.shared.key().then((data) => {
-        console.log(data!,"Key")
+        console.log(data!, "Key")
       })
     });
     return await modal.present();
