@@ -1,3 +1,4 @@
+import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -7,15 +8,20 @@ import { Player } from '../player';
 import { PreferenceService } from '../preference.service';
 
 @Component({
-  selector: 'app-bowling',
-  templateUrl: './bowling.page.html',
-  styleUrls: ['./bowling.page.scss'],
+  selector: 'app-game',
+  templateUrl: './game.page.html',
+  styleUrls: ['./game.page.scss'],
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule]
 })
-export class BowlingPage implements OnInit {
+export class GamePage implements OnInit {
 
-  constructor(private modalController: ModalController, private shared: PreferenceService) { }
+  public gameName:string='';
+
+  constructor(private modalController: ModalController, private shared: PreferenceService, private route:ActivatedRoute) {
+    this.gameName =this.route.snapshot.params.gameName;
+    console.log(this.route.snapshot.params.gameName)
+   }
   public playerKeys: string[] = []
   player: Player[] = []
   ngOnInit() {

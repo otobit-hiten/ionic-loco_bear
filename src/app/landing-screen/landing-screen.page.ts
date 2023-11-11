@@ -31,7 +31,9 @@ export class LandingScreenPage implements OnInit {
     await Device.getId().then(data => {
       this.deviceId = data.identifier
     })
+    console.log(this.deviceId)
     this.LandingScreenService.checkOrganisation(this.deviceId).subscribe(response => {
+      console.log(response)
       if (response.OId === 0) {
         this.LandingScreenService.getOrganisationData().subscribe(response => {
           var list = response.Records
@@ -46,9 +48,10 @@ export class LandingScreenPage implements OnInit {
           this.gameData = response.template_ByGames;
           switch (this.gameData.ForGame.Id) {
             case 503: this.route.navigate(['/laser'],{queryParams :this.gameData}); break;
-            case 504: this.route.navigateByUrl('/cricket'); break;
-            case 505: this.route.navigateByUrl('/laser'); break;
-            case 506: this.route.navigateByUrl('/laser'); break;
+            case 504: this.route.navigate(['/game','Cricket']); break;
+            case 505: this.route.navigate(['/game','Bowling']); break;
+            case 506: this.route.navigate(['/game','Go Karting']); break;
+            case 507: this.route.navigate(['/game','Shooting']); break;
           }
         }
       }
