@@ -50,11 +50,11 @@ export class LandingScreenPage implements OnInit {
           console.log(this.gameData,"gameData")
           await this.shared.savePlayer("device_info", JSON.stringify(response))
           switch (this.gameData.ForGame.Id) {
-            case 503: this.route.navigate(['/laser'],{queryParams :this.gameData}); break;
-            case 504: this.route.navigate(['/game','Cricket']); break;
-            case 505: this.route.navigate(['/game','Bowling']); break;
-            case 506: this.route.navigate(['/game','Go Karting']); break;
-            case 507: this.route.navigate(['/game','Shooting']); break;
+            case 503: this.route.navigate(['/laser'], { queryParams: this.gameData }); break;
+            case 504: this.route.navigate(['/game', 'Cricket']); break;
+            case 505: this.route.navigate(['/game', 'Bowling']); break;
+            case 506: this.route.navigate(['/game', 'Go Karting']); break;
+            case 507: this.route.navigate(['/game', 'Shooting']); break;
           }
         }
       }
@@ -70,8 +70,9 @@ export class LandingScreenPage implements OnInit {
         "DeviceName": this.deviceName
       };
       this.LandingScreenService.setOrganisationData(requestData).subscribe(data => {
-       this.callOrganisation()
-        // this.route.navigateByUrl('/laser', { replaceUrl: true })
+
+        this.callOrganisation()
+
       })
     }
   }
