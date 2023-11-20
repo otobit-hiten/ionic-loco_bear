@@ -10,7 +10,7 @@ export class LandingScreenService {
   private apiUrl = 'https://activbitapi.otobit.com/Office/Game/RegisterDevices/GetDeviceDetail?UniqueId='; // replace with your API endpoint
   private getOrganisation = 'https://activbitapi.otobit.com/common/search/general/data?con=Organisation-Search&page=1&pageSize=50';
   private setOrganisation = 'https://activbitapi.otobit.com/Office/Game/RegisterDevices/RegisterDevice';
-
+  private registerAndAllocate = 'http://192.168.1.52:8000/office/home/dashboard/Office-Home-Dashboard';
   constructor(private http: HttpClient) { }
 
   checkOrganisation(id:string): Observable<any> {
@@ -23,4 +23,9 @@ export class LandingScreenService {
   setOrganisationData(data:any){
     return this.http.put(this.setOrganisation,data)
   }
+
+  registerAndAllocatePlayer(data:any){
+    return this.http.put(this.registerAndAllocate,data)
+  }
+
 }

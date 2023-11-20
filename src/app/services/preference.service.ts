@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { KeysResult, Preferences } from '@capacitor/preferences';
-import { Player } from './player';
+import { Player } from '../model/player';
 
 
 

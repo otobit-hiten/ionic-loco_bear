@@ -4,11 +4,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { AddPlayerComponent } from '../add-player/add-player.component';
-import { Player } from '../player';
-import { PreferenceService } from '../preference.service';
+import { Player } from '../model/player';
+import { PreferenceService } from '../services/preference.service';
 import { ChangeDetectorRef } from '@angular/core';
 import { ConnectionStatus, Network } from '@capacitor/network';
 import { PluginListenerHandle } from '@capacitor/core';
+import { LandingScreenService } from '../landing-screen/landing-screen.service';
+import { AllocatePlayer, GameSlot } from '../model/allocate_player';
 @Component({
   selector: 'app-game',
   templateUrl: './game.page.html',
@@ -23,7 +25,7 @@ export class GamePage implements OnInit {
   network: PluginListenerHandle | undefined;
 
 
-  constructor(private ngZone: NgZone, private changeDetectorRef: ChangeDetectorRef, private modalController: ModalController, private shared: PreferenceService, private route: ActivatedRoute) {
+  constructor(private landingScreenService: LandingScreenService, private ngZone: NgZone, private changeDetectorRef: ChangeDetectorRef, private modalController: ModalController, private shared: PreferenceService, private route: ActivatedRoute) {
     this.gameName = this.route.snapshot.params.gameName;
   }
 
@@ -87,13 +89,15 @@ export class GamePage implements OnInit {
         phone: 0,
         playerCount: 0,
         id: '',
-        arrived: false
+        arrived: false,
+        time: new Date()
       }
       let key: string[] = []
       player.name = data.data['field1']
       player.phone = data.data['field2']
       player.playerCount = data.data['field3']
       player.arrived = false
+      player.time = new Date()
       player.id = "id" + Math.random().toString(16).slice(2)
       await this.shared.savePlayer(player.id, JSON.stringify(player))
 
@@ -129,4 +133,31 @@ export class GamePage implements OnInit {
   down(i: number) {
     console.log(this.player.length)
   }
+
+  registerAndAllocatePlayer() {
+   
+    const data: AllocatePlayer = {
+      OId: 0,
+      UniqueId: '',
+      DeviceName: '',
+      GameSlots: []
+    }
+
+    for (let i = 0; i < this.player.length; i++) {
+        data.GameSlots.push({
+          GameTemplateId: 0,
+          AllocatedAt: this.player[i].time,
+          StartedAt: new Date(),
+          PlayerDetail: []
+        })
+    }
+    
+
+    // this.landingScreenService.registerAndAllocatePlayer(data).subscribe(respose => {
+
+    // });
+
+    console.log(data)
+  }
+  
 }

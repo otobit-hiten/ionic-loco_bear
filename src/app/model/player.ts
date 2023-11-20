@@ -3,5 +3,6 @@ export interface Player{
     name: string,
     phone:number,
     playerCount: number,
-    arrived:boolean;
+    arrived:boolean,
+    time: Date
 }
