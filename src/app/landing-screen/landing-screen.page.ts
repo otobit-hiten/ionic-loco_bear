@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule, ToastController } from '@ionic/angular';
 import { Device } from '@capacitor/device';
 import { Router } from '@angular/router';
+import { PreferenceService } from '../services/preference.service';
 @Component({
   selector: 'app-landing-screen',
   templateUrl: './landing-screen.page.html',
@@ -21,7 +22,7 @@ export class LandingScreenPage implements OnInit {
   public orgSet: boolean = false;
   public gameSet: boolean = false;
 
-  constructor(private LandingScreenService: LandingScreenService, private toastController: ToastController, private route: Router) { }
+  constructor(private shared: PreferenceService, private LandingScreenService: LandingScreenService, private toastController: ToastController, private route: Router) { }
 
   ngOnInit() {
     this.callOrganisation()
@@ -32,7 +33,7 @@ export class LandingScreenPage implements OnInit {
       this.deviceId = data.identifier
     })
     console.log(this.deviceId)
-    this.LandingScreenService.checkOrganisation(this.deviceId).subscribe(response => {
+    this.LandingScreenService.checkOrganisation(this.deviceId).subscribe(async response => {
       console.log(response)
       if (response.OId === 0) {
         this.LandingScreenService.getOrganisationData().subscribe(response => {
@@ -41,12 +42,13 @@ export class LandingScreenPage implements OnInit {
         })
       } else {
         this.orgSet = true;
-        if (response.template_ByGames === null) {
+        if (response.Template_ByGames === null) {
           this.gameSet = false
         } else {
           this.gameSet = true;
           this.gameData = response.Template_ByGame;
-          console.log(this.gameData)
+          console.log(this.gameData,"gameData")
+          await this.shared.savePlayer("device_info", JSON.stringify(response))
           switch (this.gameData.ForGame.Id) {
             case 503: this.route.navigate(['/laser'],{queryParams :this.gameData}); break;
             case 504: this.route.navigate(['/game','Cricket']); break;
@@ -68,7 +70,7 @@ export class LandingScreenPage implements OnInit {
         "DeviceName": this.deviceName
       };
       this.LandingScreenService.setOrganisationData(requestData).subscribe(data => {
-
+       this.callOrganisation()
         // this.route.navigateByUrl('/laser', { replaceUrl: true })
       })
     }

@@ -1,7 +1,6 @@
 export interface AllocatePlayer {
     OId:        number;
     UniqueId:   string;
-    DeviceName: string;
     GameSlots:  GameSlot[];
 }
 
@@ -14,7 +13,7 @@ export interface GameSlot {
 
 export interface PlayerDetail {
     Name:         string;
-    MobileNumber: string;
+    MobileNumber: number;
     PlayersCount: number;
     AllocatedAt:  Date;
 }

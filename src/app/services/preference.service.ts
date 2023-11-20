@@ -39,4 +39,20 @@ export class PreferenceService {
     const  value  = await Preferences.keys()
     return value
   }
+
+
+  getDeviceInfo = async (_key:string) => {
+    const { value } = await Preferences.get({ key: _key });
+    return value
+  };
+
+
+  saveDeviceInfo = async (_key:string,_value:string) => {
+    await Preferences.set({
+      key: _key,
+      value: _value,
+    });
+  }
+
+
 }

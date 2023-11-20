@@ -2,7 +2,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Component, NgZone, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, ModalController } from '@ionic/angular';
+import { IonicModule, ModalController, ToastController } from '@ionic/angular';
 import { AddPlayerComponent } from '../add-player/add-player.component';
 import { Player } from '../model/player';
 import { PreferenceService } from '../services/preference.service';
@@ -11,6 +11,8 @@ import { ConnectionStatus, Network } from '@capacitor/network';
 import { PluginListenerHandle } from '@capacitor/core';
 import { LandingScreenService } from '../landing-screen/landing-screen.service';
 import { AllocatePlayer, GameSlot } from '../model/allocate_player';
+import { Device } from '@capacitor/device';
+import { HttpErrorResponse } from '@angular/common/http';
 @Component({
   selector: 'app-game',
   templateUrl: './game.page.html',
@@ -25,8 +27,9 @@ export class GamePage implements OnInit {
   network: PluginListenerHandle | undefined;
 
 
-  constructor(private landingScreenService: LandingScreenService, private ngZone: NgZone, private changeDetectorRef: ChangeDetectorRef, private modalController: ModalController, private shared: PreferenceService, private route: ActivatedRoute) {
+  constructor(private toastController: ToastController,private landingScreenService: LandingScreenService, private ngZone: NgZone, private changeDetectorRef: ChangeDetectorRef, private modalController: ModalController, private shared: PreferenceService, private route: ActivatedRoute) {
     this.gameName = this.route.snapshot.params.gameName;
+
   }
 
   public playerKeys: string[] = []
@@ -92,6 +95,7 @@ export class GamePage implements OnInit {
         arrived: false,
         time: new Date()
       }
+
       let key: string[] = []
       player.name = data.data['field1']
       player.phone = data.data['field2']
@@ -127,37 +131,70 @@ export class GamePage implements OnInit {
   }
 
   up(i: number) {
-
     console.log(this.player.length)
   }
   down(i: number) {
     console.log(this.player.length)
   }
 
-  registerAndAllocatePlayer() {
-   
+  async registerAndAllocatePlayer(pos: number) {
+
+    let deviceInfo: any
+    await this.shared.getPlayerKey("device_info").then((data) => {
+      deviceInfo = JSON.parse(data!)
+      console.log(deviceInfo)
+    })
     const data: AllocatePlayer = {
-      OId: 0,
-      UniqueId: '',
-      DeviceName: '',
+      OId: deviceInfo.OId,
+      UniqueId: deviceInfo.UniqueId,
       GameSlots: []
     }
+    data.GameSlots.push({
+      GameTemplateId: deviceInfo.Template_ByGame.GameTemplateId,
+      AllocatedAt: this.player[pos].time,
+      StartedAt: new Date(),
+      PlayerDetail: []
+    })
+    data.GameSlots[0].PlayerDetail.push({
+      Name: this.player[pos].name,
+      MobileNumber: this.player[pos].phone,
+      PlayersCount: this.player[pos].playerCount,
+      AllocatedAt: this.player[pos].time,
+    })
 
-    for (let i = 0; i < this.player.length; i++) {
-        data.GameSlots.push({
-          GameTemplateId: 0,
-          AllocatedAt: this.player[i].time,
-          StartedAt: new Date(),
-          PlayerDetail: []
-        })
-    }
-    
-
-    // this.landingScreenService.registerAndAllocatePlayer(data).subscribe(respose => {
-
-    // });
-
+    this.landingScreenService.setOrganisationData(data).subscribe(
+      (response: any) => {
+        if (response.Result === "success") {
+          console.log(this.playerKeys)
+          this.playerKeys.splice(pos,1)
+          this.player.splice(pos,1)
+          this.shared.savePlayerKey('player', JSON.stringify(this.playerKeys))
+          this.getPlayerKey()
+          this.presentToast("Success")
+        } else {
+          console.error("Unexpected response:", response);
+          this.presentToast("Something went wrong..")
+        }
+      },
+      (error: any) => {
+        if (error instanceof HttpErrorResponse) {
+          this.presentToast(error.status.toString()+""+error.message)
+        } else {
+          this.presentToast(error.status.toString())
+        }
+      }
+    );
     console.log(data)
   }
-  
+
+  async presentToast(msg: string) {
+    const toast = await this.toastController.create({
+      message: msg,
+      duration: 1500,
+      position: 'bottom',
+    });
+
+    await toast.present();
+  }
+
 }

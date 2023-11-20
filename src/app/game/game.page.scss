@@ -73,7 +73,7 @@ ion-title {
     align-items: center;
 }
 
-.ion-text-active{
+.ion-text-active {
     display: flex;
     margin-right: 3%;
     align-content: center;
@@ -81,7 +81,7 @@ ion-title {
     font-size: small;
     font-weight: bold;
 }
-.ion-text-notActive{
+.ion-text-notActive {
     display: flex;
     margin-right: 3%;
     align-content: center;
@@ -89,3 +89,19 @@ ion-title {
     font-size: small;
     font-weight: bold;
 }
+
+
+
+ion-modal#example-modal {
+    --width: fit-content;
+    --height: fit-content;
+    --border-radius: 10px;
+   
+}
+ion-modal#example-modal h1 {
+    margin: 20px 20px 10px 20px;
+}
+ion-modal#example-modal .wrapper {
+    margin-bottom: 10px;
+}
+
