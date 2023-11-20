@@ -15,7 +15,7 @@
       <ion-col class="header">
         <div class="duration">
           Approx Waiting Time :
-          <div class="duration_child" id="open-custom-dialog">1.5 Hours</div>
+          <div class="duration_child" id="open-custom-dialog">{{displayTime}}</div>
         </div>
       </ion-col>
     </ion-row>
@@ -64,25 +64,27 @@
     <ng-template>
       <div class="wrapper">
         <h1 class="modal_header">Approx Waiting Time</h1>
-        <ion-row>
-          <ion-col size="5">
-            <ion-button fill="clear" expand="full">
-              <ion-icon src="assets/up.svg"></ion-icon>
+        <ion-row class="timer">
+          <ion-col size="4">
+            <ion-button fill="clear" expand="full" (click)="minus()" >
+              <ion-icon size="large" src="assets/minus.svg"></ion-icon>
             </ion-button>
           </ion-col>
-        <ion-col class="aaa" size="2">
-          HI
+        <ion-col size="3">
+          <ion-button size="large" class="time" fill="clear" expand="full">
+           {{displayTime}}
+          </ion-button>
         </ion-col>
-          <ion-col size="5">
-            <ion-button fill="clear" expand="full">
-              <ion-icon src="assets/down.svg"></ion-icon>
+          <ion-col size="4">
+            <ion-button fill="clear" expand="full" (click)="add()">
+              <ion-icon  size="large" src="assets/plus.svg"></ion-icon>
             </ion-button>
           </ion-col>
         </ion-row>
 
-        <ion-row>
-          <ion-col size="6"><ion-button class="button_cancel" fill="clear" expand="full">Cancel</ion-button></ion-col>
-          <ion-col size="6"><ion-button class="button_save" fill="clear" expand="full">Save</ion-button></ion-col>
+        <ion-row class="timer">
+          <ion-col size="5"><ion-button class="button_cancel" fill="clear" expand="full">Cancel</ion-button></ion-col>
+          <ion-col size="5"><ion-button class="button_save" fill="clear" expand="full">Save</ion-button></ion-col>
         </ion-row>
       </div>
     </ng-template>

@@ -90,18 +90,28 @@ ion-title {
     font-weight: bold;
 }
 
-
-
 ion-modal#example-modal {
-    --width: fit-content;
+    --width: 400px;
     --height: fit-content;
     --border-radius: 10px;
+    --margin:50px
    
 }
 ion-modal#example-modal h1 {
+    text-align: center;
     margin: 20px 20px 10px 20px;
 }
 ion-modal#example-modal .wrapper {
     margin-bottom: 10px;
 }
 
+.time{
+    background-color: transparent;
+}
+
+.timer{
+    align-content: end;
+    display: flex;
+    justify-content: center;
+
+}

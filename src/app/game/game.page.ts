@@ -25,11 +25,17 @@ export class GamePage implements OnInit {
   public gameName: string = '';
   status: boolean = false
   network: PluginListenerHandle | undefined;
-
-
+  time:number = 0
+  displayTime = ""
+  deviceInfo: any
   constructor(private toastController: ToastController,private landingScreenService: LandingScreenService, private ngZone: NgZone, private changeDetectorRef: ChangeDetectorRef, private modalController: ModalController, private shared: PreferenceService, private route: ActivatedRoute) {
     this.gameName = this.route.snapshot.params.gameName;
-
+    this.minToHourMin()
+  }
+  minToHourMin() {
+    const minutes = this.time % 60;
+    const hours = Math.floor(this.time / 60);
+    this.displayTime = `${this.padTo2Digits(hours)}:${this.padTo2Digits(minutes)}`;
   }
 
   public playerKeys: string[] = []
@@ -43,6 +49,10 @@ export class GamePage implements OnInit {
     const status = await Network.getStatus();
     this.changeStatus(status);
     this.getPlayerKey()
+    await this.shared.getPlayerKey("device_info").then((data) => {
+      this.deviceInfo = JSON.parse(data!)
+      console.log(this.deviceInfo)
+    })
   }
   changeStatus(status: ConnectionStatus) {
     this.status = status.connected;
@@ -74,7 +84,21 @@ export class GamePage implements OnInit {
       }
     }
     console.log(this.player, "Hiten")
+    this.time = 0
+    this.player.forEach((res)=>{
+      this.time += 30
+    })
+    this.minToHourMin()
+    this.updateWaitingTime()
     return this.player
+  }
+  updateWaitingTime() {
+    let data : {} = {
+      Time: this.time
+    }
+    this.landingScreenService.UpdateWaitingTime(this.deviceInfo.UniqueId, data).subscribe((response:any) => {
+      console.log(response)
+    })
   }
 
   async openDialog() {
@@ -139,18 +163,14 @@ export class GamePage implements OnInit {
 
   async registerAndAllocatePlayer(pos: number) {
 
-    let deviceInfo: any
-    await this.shared.getPlayerKey("device_info").then((data) => {
-      deviceInfo = JSON.parse(data!)
-      console.log(deviceInfo)
-    })
+ 
     const data: AllocatePlayer = {
-      OId: deviceInfo.OId,
-      UniqueId: deviceInfo.UniqueId,
+      OId: this.deviceInfo.OId,
+      UniqueId: this.deviceInfo.UniqueId,
       GameSlots: []
     }
     data.GameSlots.push({
-      GameTemplateId: deviceInfo.Template_ByGame.GameTemplateId,
+      GameTemplateId: this.deviceInfo.Template_ByGame.GameTemplateId,
       AllocatedAt: this.player[pos].time,
       StartedAt: new Date(),
       PlayerDetail: []
@@ -197,4 +217,20 @@ export class GamePage implements OnInit {
     await toast.present();
   }
 
+  add(){
+    this.time += 15
+    this.minToHourMin()
+  }
+
+  minus(){
+    if(this.time > 0 ){
+      this.time -= 15
+      this.minToHourMin()
+    }
+  }
+  padTo2Digits(num: number) {
+    return num.toString().padStart(2, '0');
+  }
 }
+
+
