@@ -45,7 +45,8 @@ export class LandingScreenPage implements OnInit {
           this.gameSet = false
         } else {
           this.gameSet = true;
-          this.gameData = response.template_ByGames;
+          this.gameData = response.Template_ByGame;
+          console.log(this.gameData)
           switch (this.gameData.ForGame.Id) {
             case 503: this.route.navigate(['/laser'],{queryParams :this.gameData}); break;
             case 504: this.route.navigate(['/game','Cricket']); break;
