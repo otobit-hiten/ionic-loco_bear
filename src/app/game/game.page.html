@@ -15,7 +15,7 @@
       <ion-col class="header">
         <div class="duration">
           Approx Waiting Time :
-          <div class="duration_child" id="open-custom-dialog">{{displayTime}} Hours</div>
+          <div class="duration_child" id="open-custom-dialog">{{approxTimeToDisplay}} Hours</div>
         </div>
       </ion-col>
     </ion-row>
@@ -34,10 +34,10 @@
       <ion-col class="col" size="3">{{data.phone}}</ion-col>
       <ion-col class="col" size="1.5">{{data.playerCount}}</ion-col>
       <ion-col class="col" class="end" size="4.5">
-        <ion-button fill="clear" size="small" (click)="up(i)">
+        <ion-button fill="clear" size="small" (click)="movePlayerUp(i)">
           <ion-icon src="assets/up.svg"></ion-icon>
         </ion-button>
-        <ion-button fill="clear" size="small" (click)="down(i)">
+        <ion-button fill="clear" size="small" (click)="movePlayerDown(i)">
           <ion-icon src="assets/down.svg"></ion-icon>
         </ion-button>
         <ion-button fill="clear" size="small">Notify</ion-button>
@@ -60,31 +60,31 @@
   </ion-fab>
 
 
-  <ion-modal id="example-modal" #modal trigger="open-custom-dialog">
+  <ion-modal id="example-modal"  #modal trigger="open-custom-dialog" [backdropDismiss]="false">
     <ng-template>
       <div class="wrapper">
         <h1 class="modal_header">Approx Waiting Time</h1>
         <ion-row class="timer">
           <ion-col size="4">
-            <ion-button fill="clear" expand="full" (click)="minus()" >
+            <ion-button fill="clear" expand="full" (click)="decreaseWaitingTime()" >
               <ion-icon size="large" src="assets/minus.svg"></ion-icon>
             </ion-button>
           </ion-col>
         <ion-col size="3">
           <ion-button size="large" class="time" fill="clear" expand="full">
-           {{displayTime}}
+           {{dialogTimeToDisplay}}
           </ion-button>
         </ion-col>
           <ion-col size="4">
-            <ion-button fill="clear" expand="full" (click)="add()">
+            <ion-button fill="clear" expand="full" (click)="increaseWaitingTime()">
               <ion-icon  size="large" src="assets/plus.svg"></ion-icon>
             </ion-button>
           </ion-col>
         </ion-row>
 
         <ion-row class="timer">
-          <ion-col size="5"><ion-button class="button_cancel" fill="clear" expand="full">Cancel</ion-button></ion-col>
-          <ion-col size="5"><ion-button class="button_save" fill="clear" expand="full">Save</ion-button></ion-col>
+          <ion-col size="5"><ion-button class="button_cancel" fill="clear" expand="full" (click)="closeDialogWaitingTime()">Cancel</ion-button></ion-col>
+          <ion-col size="5"><ion-button class="button_save" fill="clear" expand="full" (click)="saveWaitingTime()">Save</ion-button></ion-col>
         </ion-row>
       </div>
     </ng-template>

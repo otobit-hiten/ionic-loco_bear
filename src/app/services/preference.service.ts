@@ -54,5 +54,18 @@ export class PreferenceService {
     });
   }
 
+  getWaitingTime = async (_key:string) => {
+    const { value } = await Preferences.get({ key: _key });
+    return value
+  };
+
+
+  saveWaitingTime = async (_key:string,_value:string) => {
+    await Preferences.set({
+      key: _key,
+      value: _value,
+    });
+  }
+
 
 }

@@ -25,21 +25,30 @@ export class GamePage implements OnInit {
   public gameName: string = '';
   status: boolean = false
   network: PluginListenerHandle | undefined;
-  time:number = 0
-  displayTime = ""
+  approxTime: number = 0
+  approxTimeToDisplay = ""
+  dialogTime: number = 0
+  dialogTimeToDisplay = ""
   deviceInfo: any
-  constructor(private toastController: ToastController,private landingScreenService: LandingScreenService, private ngZone: NgZone, private changeDetectorRef: ChangeDetectorRef, private modalController: ModalController, private shared: PreferenceService, private route: ActivatedRoute) {
+  isModalOpen = false;
+  canDismiss = false;
+
+  constructor(private toastController: ToastController, private landingScreenService: LandingScreenService, private ngZone: NgZone, private changeDetectorRef: ChangeDetectorRef, private modalController: ModalController, private shared: PreferenceService, private route: ActivatedRoute) {
     this.gameName = this.route.snapshot.params.gameName;
-    this.minToHourMin()
   }
-  minToHourMin() {
-    const minutes = this.time % 60;
-    const hours = Math.floor(this.time / 60);
-    this.displayTime = `${this.padTo2Digits(hours)}:${this.padTo2Digits(minutes)}`;
+
+  convertMinToHourAndMin() {
+    this.dialogTime = this.approxTime
+    this.dialogTimeToDisplay = this.approxTimeToDisplay
+    const minutes = this.approxTime % 60;
+    const hours = Math.floor(this.approxTime / 60);
+    this.approxTimeToDisplay = `${this.padTo2Digits(hours)}:${this.padTo2Digits(minutes)}`;
+    this.dialogTimeToDisplay = `${this.padTo2Digits(hours)}:${this.padTo2Digits(minutes)}`;
   }
 
   public playerKeys: string[] = []
   player: Player[] = []
+
   async ngOnInit() {
     this.network = await Network.addListener('networkStatusChange', status => {
       this.ngZone.run(() => {
@@ -48,12 +57,15 @@ export class GamePage implements OnInit {
     });
     const status = await Network.getStatus();
     this.changeStatus(status);
-    this.getPlayerKey()
+
     await this.shared.getPlayerKey("device_info").then((data) => {
       this.deviceInfo = JSON.parse(data!)
       console.log(this.deviceInfo)
     })
+    this.getPlayerKey()
+    
   }
+
   changeStatus(status: ConnectionStatus) {
     this.status = status.connected;
   }
@@ -83,26 +95,29 @@ export class GamePage implements OnInit {
         })
       }
     }
-    console.log(this.player, "Hiten")
-    this.time = 0
-    this.player.forEach((res)=>{
-      this.time += 30
+    this.approxTime = 0
+    this.playerKeys.forEach(() => {
+      this.approxTime += 30
     })
-    this.minToHourMin()
     this.updateWaitingTime()
-    return this.player
+    this.convertMinToHourAndMin()
+   
   }
+
   updateWaitingTime() {
-    let data : {} = {
-      Time: this.time
+    let data: {} = {
+      "Time": `${this.approxTime}`
     }
-    this.landingScreenService.UpdateWaitingTime(this.deviceInfo.UniqueId, data).subscribe((response:any) => {
+    console.log(this.approxTime)
+    this.landingScreenService.UpdateWaitingTime(this.deviceInfo.UniqueId, data).subscribe((response: any) => {
       console.log(response)
     })
   }
 
   async openDialog() {
     const modal = await this.modalController.create({
+      showBackdrop: true,
+      backdropDismiss: false,
       component: AddPlayerComponent,
       componentProps: {
         field1: '',
@@ -141,7 +156,6 @@ export class GamePage implements OnInit {
         this.shared.savePlayerKey('player', JSON.stringify(key))
       })
 
-
       await this.shared.getPlayer(player.id).then((data) => {
         console.log(data!, "Player")
       })
@@ -149,21 +163,39 @@ export class GamePage implements OnInit {
         console.log(data!, "Key")
       })
       this.getPlayerKey()
+
       this.changeDetectorRef.detectChanges()
     });
     return await modal.present();
   }
 
-  up(i: number) {
-    console.log(this.player.length)
+  movePlayerUp(i: number) {
+    if (i !== 0) {
+      console.log(this.playerKeys)
+      let fromIndex = this.playerKeys.indexOf(this.playerKeys[i])
+      let toIndex = i - 1
+      let elementToMove = this.playerKeys.splice(fromIndex, 1)[0];
+      this.playerKeys.splice(toIndex, 0, elementToMove);
+      console.log(this.playerKeys)
+      this.shared.savePlayerKey('player', JSON.stringify(this.playerKeys))
+      this.getPlayerKey()
+    }
   }
-  down(i: number) {
-    console.log(this.player.length)
+
+  movePlayerDown(i: number) {
+    if (i !== this.playerKeys.length - 1) {
+      console.log(this.playerKeys)
+      let fromIndex = this.playerKeys.indexOf(this.playerKeys[i])
+      let toIndex = i + 1
+      let elementToMove = this.playerKeys.splice(fromIndex, 1)[0];
+      this.playerKeys.splice(toIndex, 0, elementToMove);
+      console.log(this.playerKeys)
+      this.shared.savePlayerKey('player', JSON.stringify(this.playerKeys))
+      this.getPlayerKey()
+    }
   }
 
   async registerAndAllocatePlayer(pos: number) {
-
- 
     const data: AllocatePlayer = {
       OId: this.deviceInfo.OId,
       UniqueId: this.deviceInfo.UniqueId,
@@ -182,28 +214,28 @@ export class GamePage implements OnInit {
       AllocatedAt: this.player[pos].time,
     })
 
-    this.landingScreenService.setOrganisationData(data).subscribe(
-      (response: any) => {
-        if (response.Result === "success") {
-          console.log(this.playerKeys)
-          this.playerKeys.splice(pos,1)
-          this.player.splice(pos,1)
-          this.shared.savePlayerKey('player', JSON.stringify(this.playerKeys))
-          this.getPlayerKey()
-          this.presentToast("Success")
-        } else {
-          console.error("Unexpected response:", response);
-          this.presentToast("Something went wrong..")
-        }
-      },
+    this.landingScreenService.setOrganisationData(data).subscribe((response: any) => {
+      console.log(response)
+      if (response.Result === "success") {
+        console.log(this.playerKeys)
+        this.playerKeys.splice(pos, 1)
+        this.player.splice(pos, 1)
+        this.shared.savePlayerKey('player', JSON.stringify(this.playerKeys))
+        this.getPlayerKey()
+        this.presentToast("Success")
+      } else {
+        console.error("Unexpected response:", response);
+        this.presentToast("Something went wrong..")
+      }
+    },
       (error: any) => {
         if (error instanceof HttpErrorResponse) {
-          this.presentToast(error.status.toString()+""+error.message)
+          this.presentToast(error.status.toString() + "" + error.message)
         } else {
           this.presentToast(error.status.toString())
         }
-      }
-    );
+
+      })
     console.log(data)
   }
 
@@ -212,25 +244,45 @@ export class GamePage implements OnInit {
       message: msg,
       duration: 1500,
       position: 'bottom',
+      color: "danger"
     });
-
     await toast.present();
   }
 
-  add(){
-    this.time += 15
-    this.minToHourMin()
+  increaseWaitingTime() {
+    this.dialogTime += 15
+    const minutes = this.dialogTime % 60;
+    const hours = Math.floor(this.dialogTime / 60);
+    this.dialogTimeToDisplay = `${this.padTo2Digits(hours)}:${this.padTo2Digits(minutes)}`;
   }
 
-  minus(){
-    if(this.time > 0 ){
-      this.time -= 15
-      this.minToHourMin()
+  decreaseWaitingTime() {
+    if (this.dialogTime > 0) {
+      this.dialogTime -= 15
+      const minutes = this.dialogTime % 60;
+      const hours = Math.floor(this.dialogTime / 60);
+      this.dialogTimeToDisplay = `${this.padTo2Digits(hours)}:${this.padTo2Digits(minutes)}`;
     }
   }
+
   padTo2Digits(num: number) {
     return num.toString().padStart(2, '0');
   }
+
+  closeDialogWaitingTime() {
+    this.dialogTime = this.approxTime
+    this.dialogTimeToDisplay = this.approxTimeToDisplay
+    return this.modalController.dismiss(null, 'cancel');
+  }
+
+  saveWaitingTime() {
+    this.approxTime = this.dialogTime
+    this.approxTimeToDisplay = this.dialogTimeToDisplay
+    this.updateWaitingTime()
+    return this.modalController.dismiss(null, 'cancel');
+
+  }
+
 }
 
 
