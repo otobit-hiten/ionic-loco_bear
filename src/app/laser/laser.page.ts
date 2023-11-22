@@ -15,7 +15,15 @@ import { ActivatedRoute } from '@angular/router';
 export class LaserPage implements OnInit {
   public gameData : any;
 
-  constructor(private modalController: ModalController,private activatedRoute : ActivatedRoute) { }
+  public gameName : any;
+
+  constructor(private modalController: ModalController,private activatedRoute : ActivatedRoute) {
+    console.log(this.activatedRoute.snapshot.params)
+    this.gameName=this.activatedRoute.snapshot.params.gameName;
+    console.log(this.gameName)
+    console.log("game name")
+
+  }
 
   ngOnInit() {
     // this.activatedRoute.snapshot.queryParams.

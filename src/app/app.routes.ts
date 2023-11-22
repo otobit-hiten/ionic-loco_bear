@@ -10,7 +10,7 @@ export const routes: Routes = [
     loadComponent: () => import('./game/game.page').then( m => m.GamePage)
   },
   {
-    path: 'laser',
+    path: 'laser/:gameName',
     loadComponent: () => import('./laser/laser.page').then( m => m.LaserPage),
   }
 
