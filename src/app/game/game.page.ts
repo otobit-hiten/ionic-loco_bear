@@ -63,7 +63,7 @@ export class GamePage implements OnInit {
       console.log(this.deviceInfo)
     })
     this.getPlayerKey()
-    
+
   }
 
   changeStatus(status: ConnectionStatus) {
@@ -94,14 +94,13 @@ export class GamePage implements OnInit {
           this.player.push(player)
         })
       }
+      this.approxTime = 0
+      this.playerKeys.forEach(() => {
+        this.approxTime += 30
+      })
+      this.updateWaitingTime()
+      this.convertMinToHourAndMin()
     }
-    this.approxTime = 0
-    this.playerKeys.forEach(() => {
-      this.approxTime += 30
-    })
-    this.updateWaitingTime()
-    this.convertMinToHourAndMin()
-   
   }
 
   updateWaitingTime() {
@@ -125,6 +124,7 @@ export class GamePage implements OnInit {
         field3: '',
       },
     });
+    modal
     modal.onDidDismiss().then(async (data) => {
       const player: Player = {
         name: '',
@@ -136,6 +136,7 @@ export class GamePage implements OnInit {
       }
 
       let key: string[] = []
+      console.log(data.data)
       player.name = data.data['field1']
       player.phone = data.data['field2']
       player.playerCount = data.data['field3']
