@@ -32,7 +32,6 @@ export class LandingScreenPage implements OnInit {
     await Device.getId().then(data => {
       this.deviceId = data.identifier
     })
-    console.log(this.deviceId)
     this.LandingScreenService.checkOrganisation(this.deviceId).subscribe(async response => {
       console.log(response)
       if (response.OId === 0) {
@@ -47,7 +46,6 @@ export class LandingScreenPage implements OnInit {
         } else {
           this.gameSet = true;
           this.gameData = response.Template_ByGame;
-          console.log(this.gameData, "gameData")
           await this.shared.savePlayer("device_info", JSON.stringify(response))
           switch (this.gameData.ForGame.Id) {
             case 503: this.route.navigate(['/laser', 'Laser Tag']); break;

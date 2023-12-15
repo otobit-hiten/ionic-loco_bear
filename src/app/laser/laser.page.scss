@@ -7,7 +7,7 @@
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
     border-right: 0px solid;
-    
+
 }
 .game_header_right{
     border-top-right-radius: 10px;
@@ -27,7 +27,7 @@
     text-align: center;
     border: 1px solid #858585;
     border-radius: 5px;
-   
+
 }
 
 
@@ -82,4 +82,10 @@ ion-title{
      font-family: Roboto;
      color: #000;
      font-weight: 800;
+}
+.not_found {
+  padding: 5%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }

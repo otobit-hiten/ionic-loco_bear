@@ -60,7 +60,7 @@ export class GamePage implements OnInit {
 
     await this.shared.getPlayerKey("device_info").then((data) => {
       this.deviceInfo = JSON.parse(data!)
-      console.log(this.deviceInfo)
+      console.log(this.deviceInfo.GameDuration)
     })
     this.getPlayerKey()
 
@@ -90,13 +90,13 @@ export class GamePage implements OnInit {
     if (this.playerKeys !== null) {
       for (var data of this.playerKeys) {
         await this.shared.getPlayer(data).then((res) => {
-          let player: Player = JSON.parse(res!)
-          this.player.push(player)
+          let playerNew: Player = JSON.parse(res!)
+          this.player.push(playerNew)
         })
       }
       this.approxTime = 0
       this.playerKeys.forEach(() => {
-        this.approxTime += 30
+        this.approxTime += this.deviceInfo.GameDuration
       })
       this.updateWaitingTime()
       this.convertMinToHourAndMin()
@@ -124,7 +124,6 @@ export class GamePage implements OnInit {
         field3: '',
       },
     });
-    modal
     modal.onDidDismiss().then(async (data) => {
       const player: Player = {
         name: '',
@@ -164,9 +163,9 @@ export class GamePage implements OnInit {
         console.log(data!, "Key")
       })
       this.getPlayerKey()
-
       this.changeDetectorRef.detectChanges()
     });
+
     return await modal.present();
   }
 
@@ -235,7 +234,6 @@ export class GamePage implements OnInit {
         } else {
           this.presentToast(error.status.toString())
         }
-
       })
     console.log(data)
   }
